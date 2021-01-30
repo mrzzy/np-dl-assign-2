@@ -1,0 +1,58 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: np-dl-assign-2-
+  labels:
+    project: np-dl-assign-2
+spec:
+  entrypoint: train-eval-model
+  arguments:
+    parameters:
+    - name: image
+      value: core.harbor.mrzzy.co/kf-jupyter/tf-gpu-dl-plugged:0.4.2
+    - name: mlflow-experiment
+      value: test2
+    - name: notebook-name
+      value: Assignment_2_p1
+  templates:
+    - name: train-eval-model
+      script:
+        env:
+          # inject mlflow instance/artifacts endpoint
+          - name: "MLFLOW_TRACKING_URI"
+            value: "http://mlflow.mlflow.svc.cluster.local:5000"
+          - name: "MLFLOW_S3_ENDPOINT_URL"
+            value: "http://minio.minio.svc.cluster.local:9000"
+          # inject minio credentiaals and endpoint
+          - name: "MINIO_HOST"
+            value: "http://minio.minio.svc.cluster.local:9000"
+          - name: "MLFLOW_EXPERIMENT"
+            value: "{{workflow.parameters.mlflow-experiment}}"
+          - name: "AWS_ACCESS_KEY_ID"
+            valueFrom:
+              secretKeyRef:
+                name: minio-creds
+                key: "AWS_ACCESS_KEY_ID"
+          - name: "AWS_SECRET_ACCESS_KEY"
+            valueFrom:
+              secretKeyRef:
+                name: minio-creds
+                key: "AWS_SECRET_ACCESS_KEY"
+        image: "{{workflow.parameters.image}}"
+        resources:
+          # limit resources alotted to train eval job
+          limits:
+            cpu: 2000m
+            memory: 8Gi
+            nvidia.com/gpu: 1
+        command: [bash]
+        source: |
+          # clone git repository
+          git clone https://github.com/mrzzy/np-dl-assign-2.git && cd np-dl-assign-2
+          # run jupyter notebook to train eval model
+          jupyter nbconvert --to notebook \
+              --execute "notebooks/{{workflow.parameters.notebook-name}}.ipynb" \
+              --output /tf/rendered.ipynb
+          # upload the trained model to mlflow
+          s3cmd --host=$MINIO_HOST --host-bucket=$MINIO_HOST --no-ssl put /tf/rendered.ipynb \
+              s3://np-dl-assign-2-nb/{{workflow.parameters.notebook-name}}_$(git rev-parse HEAD).ipynb
