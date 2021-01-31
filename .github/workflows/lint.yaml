@@ -2,9 +2,8 @@
 # np-dl-assign-2
 # lint (ci) pipeline
 #
-name: "CI Pipeline - Text Generation Model (p2)"
+name: "Lint Pipeline"
 on: push
-
 jobs:
   lint-argo:
     runs-on: ubuntu-20.04
