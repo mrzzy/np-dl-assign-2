@@ -1,0 +1,35 @@
+#
+# np-dl-assign-2
+# continuous integration (ci) pipeline (p1)
+#
+
+name: "CI Pipeline - Sentiment Model (P1)"
+on: push
+  #push:
+  #  paths:
+  #  - "notebooks/Assignment_2_p1.ipynb"
+jobs:
+  argo-train-eval-model-p1:
+    runs-on: ubuntu-20.04
+    name: "Train evaluate Sentiment Model (P1) on Argo"
+    env:
+      ARGO_ENDPOINT: argo.mrzzy.co:443
+    steps:
+      - uses: actions/checkout@v2
+      - name: "Install argo CLI"
+        steps: |
+          # install argo cli with steps stolen from argo quickstart
+          # https://github.com/argoproj/argo/releases?after=v2.11.2
+          curl -sLO https://github.com/argoproj/argo/releases/download/v2.11.1/argo-linux-amd64.gz
+          gunzip argo-linux-amd64.gz
+          chmod +x argo-linux-amd64
+          mv ./argo-linux-amd64 /usr/local/bin/argo
+      - name: "Trigger 'train-eval-model' Workflow on Argo"
+        steps: |
+          # use https with http1 (non-grpc) to submit workflow
+          argo --argo-http1 --secure --argo-server ${ARGO_ENDPOINT}
+            --token "${{ secrets.ARGO_TOKEN }}" \
+            --namespace argo \
+            submit pipelines/dl.yaml \
+            -p notebook-name=Assignment_2_p1 -p mlflow-experiment=np-dl-2-p1-sentiment
+
