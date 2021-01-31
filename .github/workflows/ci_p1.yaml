@@ -17,7 +17,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: "Install argo CLI"
-        steps: |
+        run: |
           # install argo cli with steps stolen from argo quickstart
           # https://github.com/argoproj/argo/releases?after=v2.11.2
           curl -sLO https://github.com/argoproj/argo/releases/download/v2.11.1/argo-linux-amd64.gz
@@ -25,7 +25,7 @@ jobs:
           chmod +x argo-linux-amd64
           mv ./argo-linux-amd64 /usr/local/bin/argo
       - name: "Trigger 'train-eval-model' Workflow on Argo"
-        steps: |
+        run: |
           # use https with http1 (non-grpc) to submit workflow
           argo --argo-http1 --secure --argo-server ${ARGO_ENDPOINT}
             --token "${{ secrets.ARGO_TOKEN }}" \
