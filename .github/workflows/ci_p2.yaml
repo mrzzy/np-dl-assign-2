@@ -1,17 +1,17 @@
 #
 # np-dl-assign-2
-# continuous integration (ci) pipeline (p1)
+# continuous integration (ci) pipeline (p2)
 #
 
-name: "CI Pipeline - Sentiment Model (P1)"
-on: push
+name: "CI Pipeline - Text Generation Model (p2)"
+on:
   push:
     paths:
-    - "notebooks/Assignment_2_p1.ipynb"
+    - "notebooks/Assignment_2_p2.ipynb"
 jobs:
-  argo-train-eval-model-p1:
+  argo-train-eval-model-p2:
     runs-on: ubuntu-20.04
-    name: "Train evaluate Sentiment Model (P1) on Argo"
+    name: "Train evaluate Text Generation Model (p2) on Argo"
     env:
       ARGO_SERVER: argo.mrzzy.co:443
       ARGO_HTTP1: true
@@ -33,5 +33,5 @@ jobs:
         run: |
           # use https with http1 (non-grpc) to submit workflow
           ./argo submit pipelines/dl.yaml \
-            -p notebook-name=Assignment_2_p1 -p mlflow-experiment=np-dl-2-p1-sentiment
+            -p notebook-name=Assignment_2_p2 -p mlflow-experiment=np-dl-2-p2-textgen
 
