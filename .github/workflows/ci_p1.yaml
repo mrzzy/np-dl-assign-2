@@ -22,12 +22,12 @@ jobs:
           # https://github.com/argoproj/argo/releases?after=v2.11.2
           curl -sLO https://github.com/argoproj/argo/releases/download/v2.11.1/argo-linux-amd64.gz
           gunzip argo-linux-amd64.gz
-          sudo chmod a+x argo-linux-amd64
-          sudo mv ./argo-linux-amd64 /usr/local/bin/argo
+          chmod a+x argo-linux-amd64
+          mv ./argo-linux-amd64 ./argo
       - name: "Trigger 'train-eval-model' Workflow on Argo"
         run: |
           # use https with http1 (non-grpc) to submit workflow
-          argo --argo-http1 --secure --argo-server ${ARGO_ENDPOINT}
+          ./argo --argo-http1 --secure --argo-server ${ARGO_ENDPOINT}
             --token "${{ secrets.ARGO_TOKEN }}" \
             --namespace argo \
             submit pipelines/dl.yaml \
