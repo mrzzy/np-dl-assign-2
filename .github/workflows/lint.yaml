@@ -1,0 +1,49 @@
+#
+# np-dl-assign-2
+# lint (ci) pipeline
+#
+name: "CI Pipeline - Text Generation Model (p2)"
+on: push
+
+jobs:
+  lint-argo:
+    runs-on: ubuntu-20.04
+    name: "Lint Argo Pipeline"
+    env:
+      ARGO_SERVER: argo.mrzzy.co:443
+      ARGO_HTTP1: true
+      ARGO_SECURE: true
+      ARGO_NAMESPACE: argo
+      ARGO_TOKEN: "Bearer ${{ secrets.ARGO_TOKEN }}"
+      KUBECONFIG: /dev/null
+    steps:
+      - uses: actions/checkout@v2
+      - name: "Install argo CLI"
+        run: |
+          # install argo cli with steps stolen from argo quickstart
+          # https://github.com/argoproj/argo/releases?after=v2.12.6
+          curl -sLO https://github.com/argoproj/argo/releases/download/v2.12.6/argo-linux-amd64.gz
+          gunzip argo-linux-amd64.gz
+          chmod a+x argo-linux-amd64
+          mv ./argo-linux-amd64 ./argo
+      - name: "Lint argo pipeline"
+        run: |
+          ./argo lint pipeline/*.yaml
+
+  # check spelling typos in source code
+  spellcheck-code:
+    runs-on: ubuntu-20.04
+    name: "Spellcheck codebase"
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.7
+      - name: "Pull codespell spell checker"
+        run: |
+          pip install codespell==2.0.0
+      - name: "Spellcheck codebase"
+        run: |
+          codespell notebooks
+          codespell pipelines
+
