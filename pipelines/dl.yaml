@@ -47,6 +47,7 @@ spec:
             nvidia.com/gpu: 1
         command: [bash]
         source: |
+          set -ex
           # clone git repository
           git clone https://github.com/mrzzy/np-dl-assign-2.git && cd np-dl-assign-2
           # run jupyter notebook to train eval model
