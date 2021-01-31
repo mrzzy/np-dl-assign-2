@@ -9,7 +9,7 @@ spec:
   arguments:
     parameters:
     - name: image
-      value: core.harbor.mrzzy.co/kf-jupyter/tf-gpu-dl-plugged:0.4.3
+      value: core.harbor.mrzzy.co/kf-jupyter/tf-gpu-dl-plugged:0.4.4
     - name: mlflow-experiment
       value: test2
     - name: notebook-name
