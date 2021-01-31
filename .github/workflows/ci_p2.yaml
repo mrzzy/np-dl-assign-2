@@ -8,6 +8,7 @@ on:
   push:
     paths:
     - "notebooks/Assignment_2_p2.ipynb"
+    - "pipelines/*.yaml"
 jobs:
   argo-train-eval-model-p2:
     runs-on: ubuntu-20.04
