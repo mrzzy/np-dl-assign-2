@@ -14,7 +14,7 @@ jobs:
     name: "Train evaluate Sentiment Model (P1) on Argo"
     env:
       ARGO_SERVER: argo.mrzzy.co:443
-      ARGO_HTTP: true
+      ARGO_HTTP1: true
       ARGO_SECURE: true
       ARGO_NAMESPACE: argo
       ARGO_TOKEN: "Bearer ${{ secrets.ARGO_TOKEN }}"
