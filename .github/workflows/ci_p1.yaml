@@ -19,8 +19,8 @@ jobs:
       - name: "Install argo CLI"
         run: |
           # install argo cli with steps stolen from argo quickstart
-          # https://github.com/argoproj/argo/releases?after=v2.11.2
-          curl -sLO https://github.com/argoproj/argo/releases/download/v2.11.1/argo-linux-amd64.gz
+          # https://github.com/argoproj/argo/releases?after=v2.12.6
+          curl -sLO https://github.com/argoproj/argo/releases/download/v2.12.6/argo-linux-amd64.gz
           gunzip argo-linux-amd64.gz
           chmod a+x argo-linux-amd64
           mv ./argo-linux-amd64 ./argo
