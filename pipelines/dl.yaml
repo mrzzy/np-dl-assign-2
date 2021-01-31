@@ -40,7 +40,7 @@ spec:
                 key: "AWS_SECRET_ACCESS_KEY"
         image: "{{workflow.parameters.image}}"
         resources:
-          # limit resources alotted to train eval job
+          # limit resources allotted to train eval job
           limits:
             cpu: 2000m
             memory: 8Gi

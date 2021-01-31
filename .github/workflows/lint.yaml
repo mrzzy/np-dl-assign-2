@@ -27,7 +27,7 @@ jobs:
           mv ./argo-linux-amd64 ./argo
       - name: "Lint argo pipeline"
         run: |
-          ./argo lint pipeline/*.yaml
+          ./argo lint pipelines/*.yaml
 
   # check spelling typos in source code
   spellcheck-code:
