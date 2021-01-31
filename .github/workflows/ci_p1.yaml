@@ -27,7 +27,7 @@ jobs:
       - name: "Trigger 'train-eval-model' Workflow on Argo"
         run: |
           # use https with http1 (non-grpc) to submit workflow
-          ./argo --argo-http1 --secure --argo-server ${ARGO_ENDPOINT}
+          ./argo --argo-http1 --secure --argo-server ${ARGO_ENDPOINT} \
             --token "${{ secrets.ARGO_TOKEN }}" \
             --namespace argo \
             submit pipelines/dl.yaml \
