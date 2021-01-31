@@ -13,7 +13,11 @@ jobs:
     runs-on: ubuntu-20.04
     name: "Train evaluate Sentiment Model (P1) on Argo"
     env:
-      ARGO_ENDPOINT: argo.mrzzy.co:443
+      ARGO_SERVER: argo.mrzzy.co:443
+      ARGO_HTTP: true
+      ARGO_SECURE: true
+      ARGO_NAMESPACE: argo
+      ARGO_TOKEN: "Bearer ${{ secrets.ARGO_TOKEN }}"
       KUBECONFIG: /dev/null
     steps:
       - uses: actions/checkout@v2
@@ -28,9 +32,6 @@ jobs:
       - name: "Trigger 'train-eval-model' Workflow on Argo"
         run: |
           # use https with http1 (non-grpc) to submit workflow
-          ./argo --argo-http1 --secure --argo-server ${ARGO_ENDPOINT} \
-            --token "${{ secrets.ARGO_TOKEN }}" \
-            --namespace argo \
-            submit pipelines/dl.yaml \
+          ./argo submit pipelines/dl.yaml \
             -p notebook-name=Assignment_2_p1 -p mlflow-experiment=np-dl-2-p1-sentiment
 
