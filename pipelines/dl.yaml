@@ -43,11 +43,11 @@ spec:
           # limit resources allotted to train eval job
           limits:
             cpu: 2000m
-            memory: 12Gi
+            memory: 20Gi
             nvidia.com/gpu: 1
           requests:
             cpu: 1000m
-            memory: 12Gi
+            memory: 8Gi
             nvidia.com/gpu: 1
         command: [bash]
         source: |
@@ -62,6 +62,3 @@ spec:
           # upload the trained model to mlflow
           s3cmd --host=$MINIO_HOST --host-bucket=$MINIO_HOST --no-ssl put /tf/rendered.ipynb \
               s3://np-dl-assign-2-nb/{{workflow.parameters.notebook-name}}_$(git rev-parse HEAD).ipynb
-  # clean up pods created in this workflow
-  podGC:
-    strategy: OnPodCompletion
