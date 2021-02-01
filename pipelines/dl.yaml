@@ -14,11 +14,6 @@ spec:
       value: test2
     - name: notebook-name
       value: Assignment_2_p1
-
-  # clean up pods created in this workflow
-  podGC:
-    strategy: OnPodCompletion
-
   templates:
     - name: train-eval-model
       script:
