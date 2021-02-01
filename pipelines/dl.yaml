@@ -56,6 +56,7 @@ spec:
           git clone https://github.com/mrzzy/np-dl-assign-2.git && cd np-dl-assign-2
           # run jupyter notebook to train eval model
           jupyter nbconvert --to notebook \
+              --ExecutePreprocessor.timeout=-1 \
               --execute "notebooks/{{workflow.parameters.notebook-name}}.ipynb" \
               --output /tf/rendered.ipynb
           # upload the trained model to mlflow
