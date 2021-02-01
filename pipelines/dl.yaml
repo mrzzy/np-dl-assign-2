@@ -61,3 +61,6 @@ spec:
           # upload the trained model to mlflow
           s3cmd --host=$MINIO_HOST --host-bucket=$MINIO_HOST --no-ssl put /tf/rendered.ipynb \
               s3://np-dl-assign-2-nb/{{workflow.parameters.notebook-name}}_$(git rev-parse HEAD).ipynb
+  # clean up pods created in this workflow
+  podGC:
+    strategy: OnPodCompletion
