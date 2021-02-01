@@ -43,11 +43,11 @@ spec:
           # limit resources allotted to train eval job
           limits:
             cpu: 2000m
-            memory: 11Gi
+            memory: 12Gi
             nvidia.com/gpu: 1
           requests:
             cpu: 1000m
-            memory: 11Gi
+            memory: 12Gi
             nvidia.com/gpu: 1
         command: [bash]
         source: |
