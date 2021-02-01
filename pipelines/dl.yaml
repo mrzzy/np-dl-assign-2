@@ -48,7 +48,7 @@ spec:
           # limit resources allotted to train eval job
           limits:
             cpu: 2000m
-            memory: 12Gi
+            memory: 16Gi
             nvidia.com/gpu: 1
           requests:
             cpu: 1000m
