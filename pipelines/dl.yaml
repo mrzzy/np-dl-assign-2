@@ -25,7 +25,7 @@ spec:
             value: "http://minio.minio.svc.cluster.local:9000"
           # inject minio credentiaals and endpoint
           - name: "MINIO_HOST"
-            value: "http://minio.minio.svc.cluster.local:9000"
+            value: "minio.minio.svc.cluster.local:9000"
           - name: "MLFLOW_EXPERIMENT"
             value: "{{workflow.parameters.mlflow-experiment}}"
           - name: "AWS_ACCESS_KEY_ID"
