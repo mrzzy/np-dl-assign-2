@@ -35,5 +35,6 @@ jobs:
           # use https with http1 (non-grpc) to submit workflow
           ./argo submit pipelines/dl.yaml \
             --labels assign-part=p2,model=textgen \
-            -p notebook-name=Assignment_2_p2 -p mlflow-experiment=np-dl-2-p2-textgen
+            -p notebook-name=Assignment_2_p2 -p mlflow-experiment=np-dl-2-p2-textgen \
+            -p git-ref=${GITHUB_SHA}
 

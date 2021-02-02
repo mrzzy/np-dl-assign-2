@@ -35,5 +35,6 @@ jobs:
           # use https with http1 (non-grpc) to submit workflow
           ./argo submit pipelines/dl.yaml \
             --labels assign-part=p1,model=sentiment \
-            -p notebook-name=Assignment_2_p1 -p mlflow-experiment=np-dl-2-p1-sentiment
+            -p notebook-name=Assignment_2_p1 -p mlflow-experiment=np-dl-2-p1-sentiment \
+            -p git-ref=${GITHUB_SHA}
 

@@ -14,6 +14,8 @@ spec:
       value: test2
     - name: notebook-name
       value: Assignment_2_p1
+    - name: git-ref
+      value: HEAD
   templates:
     - name: train-eval-model
       script:
@@ -52,6 +54,8 @@ spec:
           set -ex
           # clone git repository
           git clone https://github.com/mrzzy/np-dl-assign-2.git && cd np-dl-assign-2
+          GIT_REF=$(git rev-parse {{workflow.parameters.git-ref}})
+          git checkout $GIT_REF
           # run jupyter notebook to train eval model
           jupyter nbconvert --to notebook \
               --ExecutePreprocessor.timeout=-1 \
@@ -59,4 +63,4 @@ spec:
               --output /tf/rendered.ipynb
           # upload the trained model to mlflow
           s3cmd --host=$MINIO_HOST --host-bucket=$MINIO_HOST --no-ssl put /tf/rendered.ipynb \
-              s3://np-dl-assign-2-nb/{{workflow.parameters.notebook-name}}_$(git rev-parse HEAD).ipynb
+              "s3://np-dl-assign-2-nb/{{workflow.parameters.notebook-name}}_${GIT_REF}.ipynb"
