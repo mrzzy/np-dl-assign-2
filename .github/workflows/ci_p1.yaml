@@ -8,6 +8,7 @@ on:
   push:
     paths:
     - "notebooks/Assignment_2_p1.ipynb"
+    - "notebooks/modeling.py"
     - "pipelines/dl.yaml"
 jobs:
   argo-train-eval-model-p1:
