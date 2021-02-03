@@ -24,6 +24,7 @@ from tensorflow.keras.optimizers import *
 from tensorflow.keras.callbacks import *
 from tensorflow.keras.regularizers import *
 from tensorflow.keras import Input, Model
+from tensorflow.keras.utils import Sequence
 
 def dense_classifier(
     in_op,
@@ -178,6 +179,7 @@ def build_model(
 
 def train_eval_model(
     train_data,
+    validation_data,
     test_data,
     git_repo=Repo(search_parent_directories=True),
     tags={},
@@ -190,7 +192,6 @@ def train_eval_model(
     metrics=[
         "accuracy",
     ],
-    validation_split=0.1,
     img_size=(256, 256),
     reduce_lr_stuck=False,
     reduce_lr_patience=5,
@@ -240,19 +241,30 @@ def train_eval_model(
         mlflow.log_param("sgd_momentum", sgd_momentum)
 
     # train model
-    mlflow.log_param("fit_epochs", epochs)
-    mlflow.log_param("validation_split", validation_split)
+    mlflow.log_params({
+        "fit_epochs": epochs,
+        "batch_size": batch_size,
+    })
     callbacks = compile_callbacks(
         reduce_lr_stuck=reduce_lr_stuck,
         reduce_lr_factor=reduce_lr_factor,
         reduce_lr_patience=reduce_lr_patience,
     )
+    
+    fit_params = {
+        "epochs": epochs,
+        "callbacks": callbacks,
+    }
+    if isinstance(train_data[0], Sequence):
+        fit_params["validation_data"] = validation_data
+    else:
+        # specify batch size/validation split if not a generator
+        fit_params["batch_size"] = batch_size
+        fit_params["validation_split"] = validation_data
+
     _ = model.fit(
         *train_data,
-        validation_split=validation_split,
-        batch_size=batch_size,
-        epochs=epochs,
-        callbacks=callbacks,
+        **fit_params,
     )
     mlflow.keras.log_model(model, "models")
     # evaluate model
