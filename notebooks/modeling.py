@@ -177,10 +177,8 @@ def build_model(
 
 
 def train_eval_model(
-    train_inputs,
-    train_labels,
-    test_inputs,
-    test_labels,
+    train_data,
+    test_data,
     git_repo=Repo(search_parent_directories=True),
     tags={},
     build_model_fn=build_model,
@@ -250,8 +248,7 @@ def train_eval_model(
         reduce_lr_patience=reduce_lr_patience,
     )
     _ = model.fit(
-        train_inputs,
-        train_labels,
+        *train_data,
         validation_split=validation_split,
         batch_size=batch_size,
         epochs=epochs,
@@ -259,7 +256,7 @@ def train_eval_model(
     )
     mlflow.keras.log_model(model, "models")
     # evaluate model
-    test_metrics = model.evaluate(test_inputs, test_labels, verbose=2)
+    test_metrics = model.evaluate(*test_data, verbose=2)
     # prefix metrics names with test to indicate computed on test set
     test_metric_names = ["test_" + name for name in model.metrics_names]
     mlflow.log_metrics(dict(zip(test_metric_names, test_metrics)))
