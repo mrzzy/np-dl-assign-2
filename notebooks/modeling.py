@@ -62,6 +62,7 @@ def rnn_block(
     in_op,
     rnn_cell="lstm",
     n_rnn_units=64,
+    rnn_bidrectional=False,
     rnn_activation="tanh",
     use_layer_norm=True,
     return_sequences=False,
@@ -80,12 +81,16 @@ def rnn_block(
 
     x = in_op
     if rnn_cell == "lstm":
-        x = LSTM(**rnn_params)(x)
+        rnn_layer = LSTM(**rnn_params)
     elif rnn_cell == "gru":
-        x = GRU(**rnn_params)(x)
+        rnn_layer = GRU(**rnn_params)
     else:
         raise NotImplementedError(f"Unsupported RNN cell: {rnn_cell}")
-
+    if rnn_bidrectional:
+        rnn_layer = Bidirectional(rnn_layer)
+    
+    x = rnn_layer(x)
+    
     if use_layer_norm:
         x = LayerNormalization()(x)
 
@@ -139,6 +144,7 @@ def build_model(
     n_classes,
     n_dense_units=0,
     use_batch_norm=True,
+    rnn_bidrectional=False,
     rnn_cell="lstm",
     n_rnn_layers=3,
     n_rnn_units=64,
@@ -155,6 +161,7 @@ def build_model(
             in_op=x,
             rnn_cell=rnn_cell,
             n_rnn_units=n_rnn_units,
+            rnn_bidirectional=rnn_bidirectional,
             rnn_activation=rnn_activation,
             use_layer_norm=use_layer_norm,
             # return sequences except last rnn layer
