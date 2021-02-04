@@ -62,7 +62,7 @@ def rnn_block(
     in_op,
     rnn_cell="lstm",
     n_rnn_units=64,
-    rnn_bidrectional=False,
+    rnn_bidirectional=False,
     rnn_activation="tanh",
     use_layer_norm=True,
     return_sequences=False,
@@ -86,7 +86,7 @@ def rnn_block(
         rnn_layer = GRU(**rnn_params)
     else:
         raise NotImplementedError(f"Unsupported RNN cell: {rnn_cell}")
-    if rnn_bidrectional:
+    if rnn_bidirectional:
         rnn_layer = Bidirectional(rnn_layer)
     
     x = rnn_layer(x)
@@ -144,7 +144,7 @@ def build_model(
     n_classes,
     n_dense_units=0,
     use_batch_norm=True,
-    rnn_bidrectional=False,
+    rnn_bidirectional=False,
     rnn_cell="lstm",
     n_rnn_layers=3,
     n_rnn_units=64,
