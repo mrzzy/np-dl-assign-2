@@ -28,21 +28,3 @@ jobs:
       - name: "Lint argo pipeline"
         run: |
           ./argo lint pipelines/*.yaml
-
-  # check spelling typos in source code
-  spellcheck-code:
-    runs-on: ubuntu-20.04
-    name: "Spellcheck codebase"
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
-        with:
-          python-version: 3.7
-      - name: "Pull codespell spell checker"
-        run: |
-          pip install codespell==2.0.0
-      - name: "Spellcheck codebase"
-        run: |
-          codespell notebooks
-          codespell pipelines
-
