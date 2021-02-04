@@ -39,8 +39,8 @@ def extract_run_meta_metrics(experiment, float_cols=[], filter_unfinished=True):
         meta.update(run.data.metrics)
         run_metas.append(meta)
 
-        # metrics history have to be extracted seperately as they have
-        # a seperate epoch dimension
+        # metrics history have to be extracted separately as they have
+        # a separate epoch dimension
         metric_names = run.data.metrics.keys()
         histories = [client.get_metric_history(run_id, name) for name in metric_names]
         for history in histories:
