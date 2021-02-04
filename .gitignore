@@ -157,3 +157,6 @@ dask-worker-space/
 *.dirlock
 *.lock
 *.trace
+
+# ignore extra data
+data/extra/
